@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Intake &mdash; Purchase Ledger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Zilla+Slab:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="masthead">
+    <div class="masthead__mark">PT</div>
+    <div class="masthead__text">
+      <h1>Purchase Ledger</h1>
+      <p>Intake new stock, one purchase at a time &mdash; then track it below.</p>
+    </div>
+  </header>
+
+  <main class="layout">
+
+    <!-- ============ INTAKE TAG / FORM ============ -->
+    <section class="tag-card" aria-labelledby="intake-heading">
+      <div class="tag-card__hole" aria-hidden="true"></div>
+      <h2 id="intake-heading">New Purchase</h2>
+      <p class="tag-card__hint">Add every item that came in on this purchase, then log it all at once.</p>
+
+      <form id="purchase-form" novalidate>
+        <div id="item-rows"></div>
+
+        <button type="button" id="add-row-btn" class="btn btn--ghost">+ Add another item</button>
+
+        <div id="form-errors" class="form-errors" role="alert" hidden></div>
+
+        <div class="tag-card__actions">
+          <button type="submit" class="btn btn--stamp">Log Purchase</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ============ LEDGER TABLE ============ -->
+    <section class="ledger" aria-labelledby="ledger-heading">
+      <div class="ledger__head">
+        <h2 id="ledger-heading">Item Ledger</h2>
+        <span id="item-count" class="ledger__count">0 items</span>
+      </div>
+
+      <div id="ledger-message" class="ledger__message" hidden></div>
+
+      <div class="ledger__table-wrap">
+        <table id="items-table">
+          <thead>
+            <tr>
+              <th>Item Name</th>
+              <th>Type</th>
+              <th>Purchase Date</th>
+              <th>Stock</th>
+              <th class="col-actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="items-tbody">
+            <!-- rows injected by app.js -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- row template for a single item entry in the intake form -->
+  <template id="item-row-template">
+    <div class="item-row" data-row>
+      <div class="item-row__field item-row__field--name">
+        <label>Item Name <span class="req">*</span>
+          <input type="text" name="name" maxlength="150" required placeholder="e.g. Standing Desk" />
+        </label>
+      </div>
+      <div class="item-row__field">
+        <label>Item Type <span class="req">*</span>
+          <select name="item_type_id" required>
+            <option value="">Select&hellip;</option>
+          </select>
+        </label>
+      </div>
+      <div class="item-row__field">
+        <label>Purchase Date <span class="req">*</span>
+          <input type="date" name="purchase_date" required />
+        </label>
+      </div>
+      <div class="item-row__field item-row__field--checkbox">
+        <label class="checkbox-label">
+          <input type="checkbox" name="stock_available" />
+          In stock
+        </label>
+      </div>
+      <button type="button" class="row-remove" title="Remove this item" aria-label="Remove this item">&times;</button>
+    </div>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
