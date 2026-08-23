@@ -3,100 +3,91 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Intake &mdash; Purchase Ledger</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Zilla+Slab:wght@500;600;700&display=swap" rel="stylesheet">
+<title>Purchase Tracker</title>
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <header class="masthead">
-    <div class="masthead__mark">PT</div>
-    <div class="masthead__text">
-      <h1>Purchase Ledger</h1>
-      <p>Intake new stock, one purchase at a time &mdash; then track it below.</p>
-    </div>
+  <header class="topbar">
+    <h1>Purchase Tracker</h1>
+    <p>Create a purchase, then select items and quantities to add to it. Stock is checked automatically.</p>
   </header>
 
-  <main class="layout">
+  <main class="container">
 
-    <!-- ============ INTAKE TAG / FORM ============ -->
-    <section class="tag-card" aria-labelledby="intake-heading">
-      <div class="tag-card__hole" aria-hidden="true"></div>
-      <h2 id="intake-heading">New Purchase</h2>
-      <p class="tag-card__hint">Add every item that came in on this purchase, then log it all at once.</p>
-
-      <form id="purchase-form" novalidate>
-        <div id="item-rows"></div>
-
-        <button type="button" id="add-row-btn" class="btn btn--ghost">+ Add another item</button>
-
-        <div id="form-errors" class="form-errors" role="alert" hidden></div>
-
-        <div class="tag-card__actions">
-          <button type="submit" class="btn btn--stamp">Log Purchase</button>
-        </div>
+    <!-- ============ STEP 1: CREATE A PURCHASE ============ -->
+    <section class="card">
+      <h2>1. Create a Purchase</h2>
+      <form id="purchase-form" class="inline-form">
+        <label>
+          Purchase Date <span class="req">*</span>
+          <input type="date" id="new-purchase-date" required />
+        </label>
+        <button type="submit" class="btn btn-primary">Create Purchase</button>
       </form>
+      <div id="purchase-form-error" class="error-box" hidden></div>
     </section>
 
-    <!-- ============ LEDGER TABLE ============ -->
-    <section class="ledger" aria-labelledby="ledger-heading">
-      <div class="ledger__head">
-        <h2 id="ledger-heading">Item Ledger</h2>
-        <span id="item-count" class="ledger__count">0 items</span>
-      </div>
+    <!-- ============ STEP 2: ADD ITEMS TO A PURCHASE ============ -->
+    <section class="card">
+      <h2>2. Add Item to a Purchase</h2>
+      <form id="item-form" class="item-form">
+        <label>
+          Select Purchase <span class="req">*</span>
+          <select id="item-purchase-id" required>
+            <option value="">Select purchase&hellip;</option>
+          </select>
+        </label>
 
-      <div id="ledger-message" class="ledger__message" hidden></div>
+        <label>
+          Item Name <span class="req">*</span>
+          <select id="item-select" required>
+            <option value="">Select item&hellip;</option>
+          </select>
+          <span id="item-stock-hint" class="stock-hint"></span>
+        </label>
 
-      <div class="ledger__table-wrap">
-        <table id="items-table">
+        <label>
+          Item Type
+          <span id="item-type-display" class="readonly-field">&mdash;</span>
+        </label>
+
+        <label>
+          Quantity <span class="req">*</span>
+          <input type="number" id="item-quantity" min="1" step="1" required placeholder="1" />
+        </label>
+
+        <button type="submit" class="btn btn-primary">Add Item</button>
+      </form>
+      <div id="item-form-error" class="error-box" hidden></div>
+    </section>
+
+    <!-- ============ STEP 3: DISPLAY DATA ============ -->
+    <section class="card">
+      <h2>3. All Purchases &amp; Items</h2>
+      <div id="table-message" class="message-box" hidden></div>
+      <div class="table-wrap">
+        <table id="data-table">
           <thead>
             <tr>
+              <th>Purchase</th>
+              <th>Item ID</th>
               <th>Item Name</th>
-              <th>Type</th>
+              <th>Item Type</th>
+              <th>Quantity</th>
+              <th>Stock Left</th>
               <th>Purchase Date</th>
-              <th>Stock</th>
-              <th class="col-actions">Actions</th>
+              <th>Actions</th>
             </tr>
           </thead>
-          <tbody id="items-tbody">
-            <!-- rows injected by app.js -->
+          <tbody id="data-tbody">
+            <tr><td colspan="8" class="empty-row">No purchases yet.</td></tr>
           </tbody>
         </table>
       </div>
     </section>
 
   </main>
-
-  <!-- row template for a single item entry in the intake form -->
-  <template id="item-row-template">
-    <div class="item-row" data-row>
-      <div class="item-row__field item-row__field--name">
-        <label>Item Name <span class="req">*</span>
-          <input type="text" name="name" maxlength="150" required placeholder="e.g. Standing Desk" />
-        </label>
-      </div>
-      <div class="item-row__field">
-        <label>Item Type <span class="req">*</span>
-          <select name="item_type_id" required>
-            <option value="">Select&hellip;</option>
-          </select>
-        </label>
-      </div>
-      <div class="item-row__field">
-        <label>Purchase Date <span class="req">*</span>
-          <input type="date" name="purchase_date" required />
-        </label>
-      </div>
-      <div class="item-row__field item-row__field--checkbox">
-        <label class="checkbox-label">
-          <input type="checkbox" name="stock_available" />
-          In stock
-        </label>
-      </div>
-      <button type="button" class="row-remove" title="Remove this item" aria-label="Remove this item">&times;</button>
-    </div>
-  </template>
 
   <script src="app.js"></script>
 </body>
